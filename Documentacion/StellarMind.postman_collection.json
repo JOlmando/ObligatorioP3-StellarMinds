@@ -1,0 +1,732 @@
+{
+  "info": {
+    "_postman_id": "9b679948-a41a-4758-92e3-cd8db0d54778",
+    "name": "StellarMind",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "32995446",
+    "_collection_link": "https://go.postman.co/collection/32995446-9b679948-a41a-4758-92e3-cd8db0d54778?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "item": [
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 0,\r\n  \"username\": \"admin1\",\r\n  \"password\": \"Admin123#\",\r\n  \"rol\": \"null\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/Login",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuario",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userName\": \"sssssss\",\r\n  \"name\": \"string\",\r\n  \"email\": \"string@\",\r\n  \"calle\": \"string\",\r\n  \"numeroPuerta\": 1,\r\n  \"apartamento\": 0,\r\n  \"password\": \"String1.\",\r\n  \"rol\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/Usuario",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Usuario"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetSocios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Usuario/socios",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Usuario",
+                "socios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetUserById",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Usuario/1",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Usuario",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userName\": \"string\",\r\n  \"name\": \"string\",\r\n  \"email\": \"string\",\r\n  \"calle\": \"string\",\r\n  \"numeroPuerta\": 0,\r\n  \"apartamento\": 0,\r\n  \"password\": \"string\",\r\n  \"rol\": 0\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/Usuario/",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Usuario",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Usuario/",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Usuario",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "socios byTelescopio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Usuario/socios/telescopio/",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Usuario",
+                "socios",
+                "telescopio",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Equipo",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluMSIsInJvbGUiOiJBZG1pbmlzdHJhZG9yIiwibmFtZWlkIjoiMSIsIm5iZiI6MTc4MTIxNTQ2NSwiZXhwIjoxNzgxMjE5MDY1LCJpYXQiOjE3ODEyMTU0NjV9.bfN_0KyIvqNMkrw4L6WWUzbbgr9zikhznHUskIvz9QM",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 0,\r\n  \"marca\": \"test\",\r\n  \"modelo\": \"test\",\r\n  \"cantidadDisponible\": 1,\r\n  \"stockSinUSo\": 0,\r\n  \"tipoEquipo\": 0,\r\n  \"tipoSensor\": 0,\r\n  \"resolucion\": 0,\r\n  \"tamanioPixel\": 0,\r\n  \"cargaUtil\": 0,\r\n  \"esComputarizado\": true,\r\n  \"tipoMontura\": 0,\r\n  \"diametro\": 0,\r\n  \"anguloVision\": 0,\r\n  \"apertura\": 1,\r\n  \"relacionFocal\": \"string\",\r\n  \"peso\": 0,\r\n  \"distanciaFocal\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/Equipo",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Equipo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Equipo/0",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Equipo",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetALL",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Equipo",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Equipo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetById",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluMSIsInJvbGUiOiJBZG1pbmlzdHJhZG9yIiwibmFtZWlkIjoiMSIsIm5iZiI6MTc4MTIxNTQ2NSwiZXhwIjoxNzgxMjE5MDY1LCJpYXQiOjE3ODEyMTU0NjV9.bfN_0KyIvqNMkrw4L6WWUzbbgr9zikhznHUskIvz9QM",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Equipo/2",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Equipo",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 0,\r\n  \"marca\": \"string\",\r\n  \"modelo\": \"string\",\r\n  \"cantidadDisponible\": 1,\r\n  \"stockSinUSo\": 0,\r\n  \"tipoEquipo\": 0,\r\n  \"tipoSensor\": 0,\r\n  \"resolucion\": 0,\r\n  \"tamanioPixel\": 0,\r\n  \"cargaUtil\": 0,\r\n  \"esComputarizado\": true,\r\n  \"tipoMontura\": 0,\r\n  \"diametro\": 0,\r\n  \"anguloVision\": 0,\r\n  \"apertura\": 1,\r\n  \"relacionFocal\": \"string\",\r\n  \"peso\": 0,\r\n  \"distanciaFocal\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/Equipo/2",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Equipo",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetTelescopios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Equipo/telescopios",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Equipo",
+                "telescopios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "disponibilidad",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Equipo/2/disponibilidad",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Equipo",
+                "2",
+                "disponibilidad"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Equipos Prestamo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Equipo/prestamo/7",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Equipo",
+                "prestamo",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Prestamo",
+      "item": [
+        {
+          "name": "Prestamos usuario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Prestamo/usuario/9",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Prestamo",
+                "usuario",
+                "9"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"idUsuario\": 9,\r\n  \"fechaInicio\": \"2026-06-01T23:43:22.342Z\",\r\n  \"fechaFin\": \"2026-06-08T23:43:22.342Z\",\r\n  \"idEquipos\": [\r\n    1,2,3\r\n  ],\r\n  \"idCoordinador\": 5\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/Prestamo",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Prestamo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Prestamo/listado?usuarioId=9&mes=1&anio=2026",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Prestamo",
+                "listado"
+              ],
+              "query": [
+                {
+                  "key": "usuarioId",
+                  "value": "9"
+                },
+                {
+                  "key": "mes",
+                  "value": "1"
+                },
+                {
+                  "key": "anio",
+                  "value": "2026"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Detalle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Prestamo/detalle/13",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Prestamo",
+                "detalle",
+                "13"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Devolver",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Prestamo/devolver/11",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Prestamo",
+                "devolver",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "auditoria",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Prestamo/auditoria",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Prestamo",
+                "auditoria"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getall",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluMSIsInJvbGUiOiJBZG1pbmlzdHJhZG9yIiwibmFtZWlkIjoiMSIsIm5iZiI6MTc4MTIxNTQ2NSwiZXhwIjoxNzgxMjE5MDY1LCJpYXQiOjE3ODEyMTU0NjV9.bfN_0KyIvqNMkrw4L6WWUzbbgr9zikhznHUskIvz9QM",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Prestamo",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Prestamo"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Observacion",
+      "item": [
+        {
+          "name": "GetById",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Observacion/13",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Observacion",
+                "13"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"prestamoId\": 1,\r\n  \"fechaObs\": \"2026-06-10T00:30:07.388Z\",\r\n  \"indicador\": \"null\",\r\n  \"detalle\": \"null\",\r\n  \"objetoCelesteId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/Observacion",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Observacion"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ranking",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/Observacion/ranking",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Observacion",
+                "ranking"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "evaluar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"prestamoId\": 7,\r\n  \"fechaObs\": \"2026-06-11T15:15:49.533Z\",\r\n  \"indicador\": \"\",\r\n  \"detalle\": \"\",\r\n  \"objetoCelesteId\": 8\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/Observacion/evaluar",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "Observacion",
+                "evaluar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Evaluacion",
+      "item": [
+        {
+          "name": "evaluar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"telescopio\": {\r\n    \"aperturaMm\": 0,\r\n    \"focalMm\": 0,\r\n    \"relacionFocal\": 0\r\n  },\r\n  \"camara\": {\r\n    \"sensor\": \"string\",\r\n    \"resolucionPx\": \"string\",\r\n    \"pixelSizeUm\": 0\r\n  },\r\n  \"ocular\": {\r\n    \"ocularFocalMm\": 0,\r\n    \"campoAparenteGrados\": 0\r\n  },\r\n  \"objetoCeleste\": {\r\n    \"nombre\": \"string\",\r\n    \"tipo\": \"string\"\r\n  }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/EvaluacionEquipo/evaluar",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "EvaluacionEquipo",
+                "evaluar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ObjetoCeleste",
+      "item": [
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/ObjetoCeleste",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "ObjetoCeleste"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "url",
+      "value": ""
+    }
+  ]
+}
