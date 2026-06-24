@@ -1,0 +1,61 @@
+﻿@model IEnumerable<StellarMinds.AppWeb.Models.Dtos.Logs.LogPrestamoDto>
+
+<h2>Auditoría de Préstamos</h2>
+
+<form method="get">
+
+    <div class="mb-3">
+        <label>Id Coordinador</label>
+
+        <input type="number"
+               class="form-control"
+               name="usuarioId" />
+
+        <button type="submit"
+                class="btn btn-primary mt-2">
+            Filtrar
+        </button>
+    </div>
+
+</form>
+
+<table class="table table-striped">
+
+    <thead>
+        <tr>
+            <th>Préstamo</th>
+            <th>Coordinador</th>
+            <th>Acción</th>
+            <th>Fecha</th>
+            <th>Detalle</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>@item.PrestamoId</td>
+
+                <td>@item.NombreCoordinador</td>
+
+                <td>@item.Operacion</td>
+
+                <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+
+                <td>
+                    <a asp-action="Details"
+                           asp-route-id="@item.PrestamoId"
+                           class="btn btn-info">
+                        Ver préstamo
+                    </a>
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>

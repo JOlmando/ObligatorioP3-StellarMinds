@@ -1,0 +1,54 @@
+﻿@model IEnumerable<StellarMinds.AppWeb.Models.Dtos.Prestamos.PrestamoDtoListado>
+
+@{
+    ViewData["Title"] = "Listado de Préstamos";
+}
+
+<h2>Listado de Préstamos</h2>
+
+<form method="post" id="formDevolver">
+
+    <label for="mes">Mes (1-12):</label>
+    <input type="number" id="mes" name="mes" min="1" max="12" required>
+        
+    <label for="anio">Año:</label>
+    <input type="number" id="anio" name="anio" min="1900" max="2100" required>
+
+    <button type="submit" id="btnListar" class="btn btn-primary" >
+        Buscar prestamos
+    </button>
+</form>
+
+    <table class="table table-bordered">
+
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Estado</th>
+                <th>Atrasado</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        @if (Model != null){
+            @foreach (var p in Model)
+                {
+                    <tr>
+                        <td>@p.Id</td>
+                        <td>@p.FechaInicio.ToShortDateString()</td>
+                        <td>@p.FechaFin.ToShortDateString()</td>
+                        <td>@p.Estado</td>
+
+                        <td>
+                            @(p.EstaAtrasado
+                                ? "SI"
+                                : "NO")
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="obs-error" id="obsError"><p>@ViewBag.Message</p></div>

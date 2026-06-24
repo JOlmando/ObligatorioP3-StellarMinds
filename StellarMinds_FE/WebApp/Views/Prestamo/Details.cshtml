@@ -1,0 +1,81 @@
+﻿@model StellarMinds.AppWeb.Models.Dtos.Prestamos.PrestamoDto
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+<h1>Detalle del Préstamo</h1>
+
+<div class="card">
+
+    <div class="card-body">
+
+        <p>
+            <strong>Id:</strong>
+            @Model.Id
+        </p>
+
+        <p>
+            <strong>Usuario:</strong>
+            @Model.UsuarioId
+        </p>
+
+        <p>
+            <strong>Fecha Inicio:</strong>
+            @Model.FechaInicio
+        </p>
+
+        <p>
+            <strong>Fecha Fin:</strong>
+            @Model.FechaFin
+        </p>
+
+        <p>
+            <strong>Estado:</strong>
+            @Model.Estado
+        </p>
+
+        <hr />
+
+        <h4>Equipos Prestados</h4>
+
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model != null)
+                {
+                @foreach (var equipo in Model.DetallesEquipos)
+                {
+                    <tr>
+                        <td>@equipo.NombreEquipo</td>
+                        <td>@equipo.MarcaEquipo</td>
+                        <td>@equipo.ModeloEquipo</td>
+                    </tr>
+                }
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<a asp-action="Index"
+       class="btn btn-secondary">
+    Volver
+</a>

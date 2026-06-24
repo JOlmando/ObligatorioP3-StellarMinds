@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="StellarMinds.Infraestructura/StellarMinds.Infraestructura.csproj">
+    <BuildDependency Project="StellarMinds.LogicaNegocio/StellarMinds.LogicaNegocio.csproj" />
+  </Project>
+  <Project Path="StellarMinds.LogicaAplicacion/StellarMinds.LogicaAplicacion.csproj">
+    <BuildDependency Project="StellarMinds.Infraestructura/StellarMinds.Infraestructura.csproj" />
+    <BuildDependency Project="StellarMinds.LogicaNegocio/StellarMinds.LogicaNegocio.csproj" />
+  </Project>
+  <Project Path="StellarMinds.LogicaNegocio/StellarMinds.LogicaNegocio.csproj" />
+  <Project Path="WebAPI/StellarMinds.WebAPI.csproj" Id="48cbcea1-8a2e-4a06-9167-86af423c0761" />
+</Solution>

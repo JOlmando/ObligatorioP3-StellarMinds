@@ -1,0 +1,74 @@
+﻿@model StellarMinds.AppWeb.Models.Dtos.Equipos.EquipoDtoListado
+
+@{
+    ViewData["Title"] = "Eliminar Equipo";
+}
+
+<h1>Eliminar Equipo</h1>
+
+<div class="alert alert-danger">
+    <strong>¿Está seguro que desea eliminar este equipo?</strong>
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+        <dl class="row">
+
+            <dt class="col-sm-3">
+                Id
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Id
+            </dd>
+
+            <dt class="col-sm-3">
+                Marca
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Marca
+            </dd>
+
+            <dt class="col-sm-3">
+                Modelo
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Modelo
+            </dd>
+
+            <dt class="col-sm-3">
+                Cantidad Disponible
+            </dt>
+            <dd class="col-sm-9">
+                @Model.StockSinUso
+            </dd>
+
+            <dt class="col-sm-3">
+                Tipo de Equipo
+            </dt>
+            <dd class="col-sm-9">
+                @Model.TipoEquipo
+            </dd>
+
+        </dl>
+
+    </div>
+</div>
+
+<br/>
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    @if (!ViewBag.equipoPrestado)
+        {
+            <button type="submit" class="btn btn-danger">
+                Confirmar Eliminación
+            </button>
+        }
+        else
+        {
+            <div><p>No se puede eliminar un equipo en Prestamo</p></div>
+        }
+        <a asp-action="Index" class="btn btn-secondary">
+        Cancelar
+    </a>
+
+</form>

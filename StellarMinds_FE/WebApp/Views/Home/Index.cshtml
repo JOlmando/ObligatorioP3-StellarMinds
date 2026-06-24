@@ -1,0 +1,144 @@
+﻿@* @{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div> *@
+
+@{
+    ViewData["Title"] = "Inicio";
+    var nombre = Context.Session.GetString("Nombre");
+    var rol = Context.Session.GetString("Rol");
+    bool logueado = !string.IsNullOrEmpty(nombre);
+}
+
+@using Microsoft.AspNetCore.Http
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet" />
+
+<style>
+    .hero { text-align: center; padding: 4rem 1rem 3rem; }
+    .hero-stars { font-size: 24px; letter-spacing: 8px; margin-bottom: 1.5rem; color: #EF9F27; }
+    .hero-title { font-family: 'Cinzel', serif; font-size: 48px; font-weight: 600; letter-spacing: 4px; margin: 0 0 1rem; color: #1a1a2e; }
+    .hero-subtitle { font-size: 18px; color: #666; max-width: 520px; margin: 0 auto 2.5rem; line-height: 1.7; }
+    .hero-btn { display: inline-block; font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 2px; padding: 12px 32px; border-radius: 99px; border: 1.5px solid #1a1a2e; color: #1a1a2e; text-decoration: none; transition: all 0.2s; }
+    .hero-btn:hover { background: #1a1a2e; color: #fff; text-decoration: none; }
+    .hero-btn-ghost { border-color: #bbb; color: #666; margin-left: 12px; }
+    .hero-btn-ghost:hover { background: #f1f1f1; color: #333; }
+
+    .divider { display: flex; align-items: center; gap: 1rem; margin: 3rem 0; }
+    .divider-line { flex: 1; height: 1px; background: #e5e5e5; }
+    .divider-icon { color: #EF9F27; font-size: 16px; letter-spacing: 4px; }
+
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 3rem; }
+    .feature-card { padding: 1.5rem; border-radius: 12px; border: 1px solid #e5e5e5; background: #fff; text-align: center; transition: border-color 0.2s, transform 0.2s; }
+    .feature-card:hover { border-color: #bbb; transform: translateY(-2px); }
+    .feature-icon { font-size: 32px; margin-bottom: 12px; }
+    .feature-title { font-family: 'Cinzel', serif; font-size: 13px; font-weight: 600; letter-spacing: 1px; color: #1a1a2e; margin: 0 0 6px; }
+    .feature-desc { font-size: 13px; color: #888; line-height: 1.6; margin: 0; }
+
+    .quote-block { text-align: center; padding: 2.5rem 1rem; background: #fafafa; border-radius: 16px; border: 1px solid #e5e5e5; margin-bottom: 3rem; }
+    .quote-text { font-family: 'Cinzel', serif; font-size: 17px; color: #333; line-height: 1.8; margin: 0 0 12px; font-style: italic; }
+    .quote-author { font-size: 13px; color: #888; letter-spacing: 1px; }
+
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 3rem; }
+    .stat-card { background: #fafafa; border-radius: 10px; padding: 1.25rem; text-align: center; border: 1px solid #e5e5e5; }
+    .stat-number { font-family: 'Cinzel', serif; font-size: 28px; font-weight: 600; color: #1a1a2e; margin: 0 0 4px; }
+    .stat-label { font-size: 12px; color: #888; letter-spacing: 0.5px; text-transform: uppercase; margin: 0; }
+
+    .cta-block { text-align: center; padding: 3rem 1rem; }
+    .cta-title { font-family: 'Cinzel', serif; font-size: 20px; color: #1a1a2e; margin: 0 0 8px; }
+    .cta-sub { font-size: 14px; color: #888; margin: 0 0 1.5rem; }
+
+    .footer-stars { text-align: center; font-size: 18px; letter-spacing: 6px; color: #ddd; padding: 1rem 0 0; }
+</style>
+
+<div class="hero">
+    <div class="hero-stars">★ ✦ ★</div>
+    <h1 class="hero-title">Stellar Minds</h1>
+    <p class="hero-subtitle">
+        Una comunidad de apasionados por el cosmos. Exploramos, observamos y compartimos el universo juntos.
+    </p>
+    @if (!logueado)
+    {
+        <a href="/Login/Login" class="hero-btn">Ingresar al observatorio</a>
+    }
+    else
+    {
+        <a href="/Observacion/Ranking" class="hero-btn">Ver ranking de objetos</a>
+        @if (rol == "Socio")
+        {
+            <a href="/Observacion/Create" class="hero-btn hero-btn-ghost">Nueva observación</a>
+        }
+        @if (rol == "Coordinador")
+        {
+            <a href="/Prestamo/Create" class="hero-btn hero-btn-ghost">Nuevo préstamo</a>
+        }
+    }
+</div>
+
+<div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-icon">✦ ✦ ✦</div>
+    <div class="divider-line"></div>
+</div>
+
+<div class="cards-grid">
+    <div class="feature-card">
+        <div class="feature-icon">🔭</div>
+        <p class="feature-title">Observaciones</p>
+        <p class="feature-desc">Registrá tus avistamientos y contribuí al conocimiento colectivo del club.</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">🪐</div>
+        <p class="feature-title">Objetos celestes</p>
+        <p class="feature-desc">Explorá el catálogo de planetas, estrellas, galaxias y nebulosas registradas.</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">📡</div>
+        <p class="feature-title">Equipos</p>
+        <p class="feature-desc">Gestioná el préstamo de telescopios y equipos del observatorio.</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">🌌</div>
+        <p class="feature-title">Comunidad</p>
+        <p class="feature-desc">Conectá con otros socios apasionados por la astronomía y el cosmos.</p>
+    </div>
+</div>
+
+<div class="quote-block">
+    <p class="quote-text">"El cosmos es todo lo que es, todo lo que fue y todo lo que alguna vez será."</p>
+    <p class="quote-author">— Carl Sagan</p>
+</div>
+
+<div class="stats-row">
+    <div class="stat-card">
+        <p class="stat-number">∞</p>
+        <p class="stat-label">Estrellas por descubrir</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-number">93<span style="font-size:16px">mil</span></p>
+        <p class="stat-label">Millones de años luz</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-number">2 × 10<sup style="font-size:14px">12</sup></p>
+        <p class="stat-label">Galaxias observables</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-number">1610</p>
+        <p class="stat-label">Primer telescopio</p>
+    </div>
+</div>
+
+@if (!logueado)
+{
+    <div class="cta-block">
+        <p class="cta-title">¿Ya sos socio?</p>
+        <p class="cta-sub">Iniciá sesión para acceder a todas las funciones del observatorio.</p>
+        <a href="/Login/Login" class="hero-btn">Iniciar sesión</a>
+    </div>
+}
+
+<div class="footer-stars">· · · ✦ · · ·</div>

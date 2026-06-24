@@ -1,0 +1,75 @@
+﻿@model IEnumerable<StellarMinds.AppWeb.Models.Dtos.Equipos.EquipoDtoListado>
+
+@{
+    ViewData["Title"] = "Equipos";
+}
+
+<h1>Listado de Equipos</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        Nuevo Equipo
+    </a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Stock</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var equipo in Model)
+        {
+            <tr>
+                <td>@equipo.Id</td>
+                <td>@equipo.Marca</td>
+                <td>@equipo.Modelo</td>
+                <td>@equipo.StockSinUso</td>
+                <td>
+                    @if (equipo.TipoEquipo == 0)
+                    {
+                        <text>Telescopio</text>
+                    }
+                    else if (equipo.TipoEquipo == 1)
+                    {
+                        <text>Montura</text>
+                    }
+                    else if (equipo.TipoEquipo == 2)
+                    {
+                        <text>Camara</text>
+                    }
+                    else if (equipo.TipoEquipo == 3)
+                    {
+                        <text>Ocular</text>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details"
+                           asp-route-id="@equipo.Id"
+                           class="btn btn-info btn-sm">
+                        Detalles
+                    </a>
+
+                    <a asp-action="Edit"
+                           asp-route-id="@equipo.Id"
+                           class="btn btn-warning btn-sm">
+                        Editar
+                    </a>
+
+                    <a asp-action="Delete"
+                           asp-route-id="@equipo.Id"
+                           class="btn btn-danger btn-sm">
+                        Eliminar
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

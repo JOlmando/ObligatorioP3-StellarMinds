@@ -1,0 +1,154 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+    var nombre = Context.Session.GetString("Nombre");
+    var rol = Context.Session.GetString("Rol");
+    bool logueado = !string.IsNullOrEmpty(nombre);
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Stellar Minds</title>
+
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" /> *@
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet" />
+
+    <style>
+        body { background: #f8f8f6; }
+
+        .sm-navbar { background: #0e0e1a; border-bottom: 1px solid #1e1e35; padding: 0; }
+        .sm-navbar .container { display: flex; align-items: center; height: 60px; gap: 0; }
+
+        .sm-brand { font-family: 'Cinzel', serif; font-size: 17px; font-weight: 600; color: #EF9F27 !important; letter-spacing: 2px; text-decoration: none; display: flex; align-items: center; gap: 8px; margin-right: 2rem; white-space: nowrap; }
+        .sm-brand:hover { color: #FAC775 !important; text-decoration: none; }
+        .sm-brand-star { font-size: 14px; }
+
+        .sm-nav { display: flex; align-items: center; gap: 2px; flex: 1; flex-wrap: wrap; }
+        .sm-nav-link { font-size: 13px; color: #aaa !important; text-decoration: none; padding: 8px 14px; border-radius: 6px; letter-spacing: 0.5px; transition: color 0.2s, background 0.2s; white-space: nowrap; }
+        .sm-nav-link:hover { color: #fff !important; background: #1e1e35; text-decoration: none; }
+        .sm-nav-link.active { color: #EF9F27 !important; }
+
+        .sm-nav-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+        .sm-user { font-size: 12px; color: #666; letter-spacing: 0.5px; white-space: nowrap; }
+        .sm-rol { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 99px; margin-left: 6px; letter-spacing: 0.5px; }
+        .sm-rol-admin { background: #FAEEDA; color: #633806; }
+        .sm-rol-coord { background: #E6F1FB; color: #0C447C; }
+        .sm-rol-socio { background: #E1F5EE; color: #085041; }
+
+        .sm-btn { font-size: 12px; letter-spacing: 0.5px; padding: 6px 16px; border-radius: 99px; text-decoration: none; border: 1px solid; transition: all 0.2s; white-space: nowrap; }
+        .sm-btn-login { border-color: #EF9F27; color: #EF9F27; }
+        .sm-btn-login:hover { background: #EF9F27; color: #0e0e1a; text-decoration: none; }
+        .sm-btn-logout { border-color: #444; color: #888; }
+        .sm-btn-logout:hover { border-color: #888; color: #ccc; text-decoration: none; }
+
+        .sm-toggler { display: none; background: none; border: 1px solid #333; color: #aaa; padding: 6px 10px; border-radius: 6px; cursor: pointer; margin-left: auto; }
+
+        .sm-main { min-height: calc(100vh - 60px - 56px); }
+        .sm-container { max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+        .sm-footer { background: #0e0e1a; border-top: 1px solid #1e1e35; padding: 16px 0; text-align: center; }
+        .sm-footer-text { font-size: 12px; color: #444; letter-spacing: 1px; margin: 0; }
+        .sm-footer-stars { color: #EF9F27; letter-spacing: 4px; font-size: 10px; margin-bottom: 4px; }
+
+        @@media (max-width: 768px) {
+            .sm-toggler { display: block; }
+            .sm-nav { display: none; flex-direction: column; align-items: flex-start; width: 100%; background: #0e0e1a; position: absolute; top: 60px; left: 0; z-index: 999; padding: 12px 0; border-bottom: 1px solid #1e1e35; }
+            .sm-nav.open { display: flex; }
+            .sm-nav-right { display: none; flex-direction: column; align-items: flex-start; width: 100%; background: #0e0e1a; padding: 0 0 12px 12px; }
+            .sm-nav-right.open { display: flex; }
+            .sm-navbar .container { flex-wrap: wrap; position: relative; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="sm-navbar">
+        <div class="container">
+            <a class="sm-brand" asp-controller="Home" asp-action="Index">
+                <span class="sm-brand-star">✦</span> Stellar Minds
+            </a>
+
+            <button class="sm-toggler" onclick="toggleMenu()">☰</button>
+
+            <div class="sm-nav" id="smNav">
+                <a class="sm-nav-link" asp-controller="Home" asp-action="Index">Inicio</a>
+
+                @if (logueado)
+                {
+                    @if (rol == "Administrador")
+                    {
+                        <a class="sm-nav-link" asp-controller="Usuario" asp-action="Create">Socios</a>
+                        <a class="sm-nav-link" asp-controller="Equipo" asp-action="Index">Equipos</a>
+                        <a class="sm-nav-link" asp-controller="Prestamo" asp-action="Index">Auditorías</a>
+                        <a class="sm-nav-link" asp-controller="Usuario" asp-action="ConTelescopio">Consulta Telescopio</a>
+                    }
+                    @if (rol == "Coordinador")
+                    {
+                        <a class="sm-nav-link" asp-controller="Prestamo" asp-action="Create">Nuevo Préstamo</a>
+                        <a class="sm-nav-link" asp-controller="Prestamo" asp-action="Devolucion">Devoluciones</a>
+                        <a class="sm-nav-link" asp-controller="Usuario" asp-action="ConTelescopio">Consulta Telescopio</a>
+                    }
+                    @if (rol == "Socio")
+                    {
+                        <a class="sm-nav-link" asp-controller="Observacion" asp-action="Create">Nueva Observación</a>
+                        <a class="sm-nav-link" asp-controller="Prestamo" asp-action="ListadoSocio">Mis Préstamos</a>
+                    }
+                    <a class="sm-nav-link" asp-controller="Observacion" asp-action="Ranking">Ranking Objetos</a>
+                }
+            </div>
+
+            <div class="sm-nav-right" id="smNavRight">
+                @if (!logueado)
+                {
+                    <a class="sm-btn sm-btn-login" asp-controller="Login" asp-action="Login">Ingresar</a>
+                }
+                else
+                {
+                    <span class="sm-user">
+                        @nombre
+                        <span class="sm-rol @(rol == "Administrador" ? "sm-rol-admin" : rol == "Coordinador" ? "sm-rol-coord" : "sm-rol-socio")">
+                            @rol
+                        </span>
+                    </span>
+                    <a class="sm-btn sm-btn-logout" asp-controller="Login" asp-action="Logout">Salir</a>
+                }
+            </div>
+        </div>
+    </nav>
+
+    <div class="sm-main">
+        <div class="sm-container">
+            <main role="main">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <footer class="sm-footer">
+        <div class="container">
+            <p class="sm-footer-stars">✦ · ✦ · ✦</p>
+            <p class="sm-footer-text">&copy; 2026 Stellar Minds — Explorando el cosmos</p>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('smNav').classList.toggle('open');
+            document.getElementById('smNavRight').classList.toggle('open');
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

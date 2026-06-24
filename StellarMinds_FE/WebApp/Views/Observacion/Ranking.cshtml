@@ -1,0 +1,111 @@
+﻿@model IEnumerable<StellarMinds.AppWeb.Models.Dtos.ObjetoCeleste.RankingObjetoCelesteDto>
+
+@{
+    ViewData["Title"] = "Ranking";
+    var maxObs = Model.Any() ? Model.Max(x => x.CantidadObservaciones) : 1;
+
+    var iconos = new Dictionary<string, string> {
+        {"Estrella","⭐"}, {"Planeta","🪐"}, {"Galaxia","🌌"}, {"Nebulosa","🌫️"}, {"Cometa","☄️"}
+    };
+    var barColors = new Dictionary<string, string> {
+        {"Estrella","#EF9F27"}, {"Planeta","#378ADD"}, {"Galaxia","#7F77DD"},
+        {"Nebulosa","#1D9E75"}, {"Cometa","#D4537E"}
+    };
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet" />
+
+<style>
+    .cosmos-wrap { padding: 2rem 0; }
+    .cosmos-header { text-align: center; margin-bottom: 2rem; }
+    .cosmos-title { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 600; letter-spacing: 2px; margin: 0 0 6px; }
+    .cosmos-subtitle { font-size: 13px; color: #888; letter-spacing: 1px; text-transform: uppercase; }
+
+    .ranking-item { display: flex; align-items: center; gap: 16px; padding: 14px 18px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #e5e5e5; background: #fff; transition: border-color 0.2s; }
+    .ranking-item:hover { border-color: #bbb; }
+
+    .rank-badge { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Cinzel', serif; font-size: 14px; font-weight: 600; flex-shrink: 0; }
+    .rank-1 { background: #FAC775; color: #633806; }
+    .rank-2 { background: #D3D1C7; color: #2C2C2A; }
+    .rank-3 { background: #F5C4B3; color: #4A1B0C; }
+    .rank-other { background: #f1f1f1; color: #666; }
+
+    .item-icon { font-size: 22px; flex-shrink: 0; }
+    .item-info { flex: 1; min-width: 0; }
+    .item-name { font-size: 15px; font-weight: 500; margin: 0 0 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .tipo-badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 6px; }
+    .tipo-estrella { background: #FAEEDA; color: #633806; }
+    .tipo-planeta  { background: #E6F1FB; color: #0C447C; }
+    .tipo-galaxia  { background: #EEEDFE; color: #3C3489; }
+    .tipo-nebulosa { background: #E1F5EE; color: #085041; }
+    .tipo-cometa   { background: #FBEAF0; color: #72243E; }
+    .tipo-otro     { background: #f1f1f1; color: #666; }
+
+    .item-bar-wrap { flex: 1; max-width: 200px; }
+    .item-bar-bg { height: 6px; background: #f1f1f1; border-radius: 99px; overflow: hidden; }
+    .item-bar-fill { height: 100%; border-radius: 99px; transition: width 0.8s ease; }
+
+    .obs-count { font-size: 15px; font-weight: 500; min-width: 32px; text-align: right; }
+    .obs-label { font-size: 11px; color: #888; text-align: right; }
+
+    .cosmos-divider { height: 1px; background: #e5e5e5; margin: 1.5rem 0; }
+    .cosmos-legend { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #888; }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+</style>
+
+<div class="cosmos-wrap">
+    <div class="cosmos-header">
+        <div style="font-size:28px; margin-bottom:8px;">✦ ✧ ✦</div>
+        <h1 class="cosmos-title">Ranking de objetos celestes</h1>
+        <p class="cosmos-subtitle">Observaciones registradas · Temporada actual</p>
+    </div>
+
+    @{ int rank = 0; }
+    @foreach (var item in Model)
+    {
+        rank++;
+        var pct = maxObs > 0 ? (item.CantidadObservaciones * 100 / maxObs) : 0;
+        var tipo = item.Tipo ?? "Otro";
+        var tipoLower = tipo.ToLower();
+        var icono = iconos.ContainsKey(tipo) ? iconos[tipo] : "🔭";
+        var barColor = barColors.ContainsKey(tipo) ? barColors[tipo] : "#888780";
+        var rankClass = rank == 1 ? "rank-1" : rank == 2 ? "rank-2" : rank == 3 ? "rank-3" : "rank-other";
+
+        <div class="ranking-item">
+            <div class="rank-badge @rankClass">@rank</div>
+            <div class="item-icon">@icono</div>
+            <div class="item-info">
+                <p class="item-name">@item.Nombre</p>
+                <span class="tipo-badge tipo-@tipoLower">@tipo</span>
+            </div>
+            <div class="item-bar-wrap">
+                <div class="item-bar-bg">
+                    <div class="item-bar-fill" data-pct="@pct" style="width:0%; background:@barColor"></div>
+                </div>
+            </div>
+            <div>
+                <div class="obs-count">@item.CantidadObservaciones</div>
+                <div class="obs-label">obs.</div>
+            </div>
+        </div>
+    }
+
+    <div class="cosmos-divider"></div>
+    <div class="cosmos-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div> Estrella</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div> Planeta</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#7F77DD"></div> Galaxia</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#1D9E75"></div> Nebulosa</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#D4537E"></div> Cometa</div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.item-bar-fill').forEach(function (bar) {
+            bar.style.width = bar.dataset.pct + '%';
+        });
+    });
+</script>

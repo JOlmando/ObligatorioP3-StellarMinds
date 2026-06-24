@@ -1,0 +1,205 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+    var nombre = Context.Session.GetString("Nombre");
+    var rol = Context.Session.GetString("Rol");
+    bool logueado = !string.IsNullOrEmpty(nombre);
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Stellar Minds</title>
+
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+
+                <a class="navbar-brand"
+                       asp-controller="Home"
+                       asp-action="Index">
+                    Stellar Minds
+                </a>
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#menuPrincipal">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="menuPrincipal">
+
+                    <ul class="navbar-nav me-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                   asp-controller="Home"
+                                   asp-action="Index">
+                                Inicio
+                            </a>
+                        </li>
+
+                        @if (logueado)
+                        {
+                            @* ADMINISTRADOR *@
+                            @if (rol == "Administrador")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                           asp-controller="Usuario"
+                                           asp-action="Create">
+                                        Socio
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                           asp-controller="Equipo"
+                                           asp-action="Index">
+                                        Equipos
+                                    </a>
+                                </li> 
+
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                           asp-controller="Prestamo"
+                                           asp-action="Index">
+                                        Auditorías
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                           asp-controller="Usuario"
+                                           asp-action="ConTelescopio">
+                                        Consulta Telescopio
+                                    </a>
+                                </li>
+                            }
+
+                            @* COORDINADOR *@
+                            @if (rol == "Coordinador")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                           asp-controller="Prestamo"
+                                           asp-action="Create">
+                                        Nuevo Préstamo
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                           asp-controller="Prestamo"
+                                           asp-action="Devolucion">
+                                        Devoluciones
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                           asp-controller="Usuario"
+                                           asp-action="ConTelescopio">
+                                        Consulta Telescopio
+                                    </a>
+                                </li>
+                            }
+
+                            @* SOCIO *@
+                            @if (rol == "Socio")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                           asp-controller="Observacion"
+                                           asp-action="Create">
+                                        Nueva Observación
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                           asp-controller="Prestamo"
+                                           asp-action="ListadoSocio">
+                                        Mis Préstamos
+                                    </a>
+                                </li>
+                            }
+
+                            @* TODOS LOS ROLES *@
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                       asp-controller="Observacion"
+                                       asp-action="Ranking">
+                                    Ranking Objetos
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav">
+
+                        @if (!logueado)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                       asp-controller="Login"
+                                       asp-action="Login">
+                                    Login
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <span class="navbar-text me-3">
+                                    @nombre (@rol)
+                                </span>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                       asp-controller="Login"
+                                       asp-action="Logout">
+                                    Logout
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-4">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted mt-5">
+        <div class="container">
+            &copy; 2026 - Stellar Minds
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

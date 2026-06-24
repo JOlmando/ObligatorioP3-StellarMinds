@@ -1,0 +1,63 @@
+﻿@model StellarMinds.AppWeb.Models.Dtos.Usuarios.UsuarioAltaDto
+
+<h1>Alta de Usuario</h1>
+
+<form asp-action="Create" method="post">
+
+    <div class="mb-3">
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Calle"></label>
+        <input asp-for="Calle" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NumeroPuerta"></label>
+        <input asp-for="NumeroPuerta" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Apartamento"></label>
+        <input asp-for="Apartamento" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Password"></label>
+        <input asp-for="Password"
+               type="password"
+               class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Rol"></label>
+        <select asp-for="Rol" class="form-select">
+            <option value="0">Administrador</option>
+            <option value="1">Coordinador</option>
+            <option value="2">Socio</option>
+        </select>
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary">
+        Guardar
+    </button>
+
+    <a asp-action="Index"
+           class="btn btn-secondary">
+        Volver
+    </a>
+
+</form>

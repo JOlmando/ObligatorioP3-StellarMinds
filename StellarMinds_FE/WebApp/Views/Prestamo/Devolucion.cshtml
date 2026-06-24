@@ -1,0 +1,161 @@
+﻿@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+<form method="post" id="formDevolver">
+    <!-- Socio -->
+    <div class="mb-3">
+        <label class="form-label">Socio</label>
+        <select id="selectSocio" name="idSocio" class="form-select">
+            <option value="">Seleccione un socio...</option>
+            @foreach (var s in ViewBag.Socios)
+            {
+                <option value="@s.Id">@s.UserName</option>
+            }
+        </select>
+    </div>
+
+    <!-- Prestamos -->
+    <div class="mb-3" id="divPrestamos" style="display:none">
+        <label class="form-label">Préstamo a devolver</label>
+        <select id="selectPrestamo" name="idPrestamo" class="form-select">
+            <option value="">Seleccione un préstamo...</option>
+        </select>
+        <div id="msgPrestamos" class="mt-1"></div>
+    </div>
+
+    <!-- Detalle del préstamo seleccionado -->
+    <div id="divDetallePrestamo" class="card mt-3" style="display:none">
+        <div class="card-header">
+            <strong>Detalle del Préstamo</strong>
+        </div>
+        <div class="card-body">
+            <p><strong>ID:</strong> <span id="detId"></span></p>
+            <p><strong>Fecha Inicio:</strong> <span id="detFechaInicio"></span></p>
+            <p><strong>Fecha Fin:</strong> <span id="detFechaFin"></span></p>
+            <p><strong>Estado:</strong> <span id="detEstado"></span></p>
+            <hr />
+            <strong>Equipos:</strong>
+            <ul id="detEquipos" class="mt-2"></ul>
+        </div>
+    </div>
+
+    <button type="submit" id="btnDevolver" class="btn btn-primary">
+        Registrar Devolución
+    </button>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <script>
+        const API_BASE = "@ViewBag.ApiUrl";
+
+        let prestamosCache = [];
+
+        document.getElementById("selectSocio").addEventListener("change", async function () {
+            const selectPrestamo = document.getElementById("selectPrestamo");
+            const divPrestamos   = document.getElementById("divPrestamos");
+            const msgPrestamos   = document.getElementById("msgPrestamos");
+            const btnDevolver    = document.getElementById("btnDevolver");
+
+            // limpiás el select de préstamos
+            selectPrestamo.innerHTML = `<option value="">Seleccione un préstamo...</option>`;
+            divDetallePrestamo.style.display = "none";
+            btnDevolver.disabled = true;
+            prestamosCache = []; // limpiás el cache
+
+            const idSocio = this.value;
+            if (!idSocio) {
+                divPrestamos.style.display = "none";
+                return;
+            }
+
+          
+            try {
+                const TOKEN = "@ViewBag.Token";
+
+                const response = await fetch(
+                    `${API_BASE}api/Prestamo/usuario/${idSocio}`,
+                        {
+                            headers: {
+                                "Authorization": `Bearer ${TOKEN}`
+                            }
+                        }
+                );
+                const todosPrestamos = await response.json();
+
+                const prestamos = todosPrestamos.filter(p => p.estado === 1);
+
+                prestamosCache = prestamos;
+
+                if (prestamos.length === 0) {
+                    msgPrestamos.innerHTML = `<span class="text-warning">
+                        Este socio no tiene préstamos activos
+                    </span>`;
+                    divPrestamos.style.display = "block";
+                    return;
+                }
+
+                // cargás las opciones con los préstamos
+                prestamos.forEach(p => {
+                    const option = document.createElement("option");
+                    option.value = p.id;
+                    const fechaInicio = new Date(p.fechaInicio).toLocaleDateString();
+                    const fechaFin = new Date(p.fechaFin).toLocaleDateString();
+                    option.textContent = `Préstamo #${p.id} - Desde: ${fechaInicio} Hasta: ${fechaFin}`;
+
+                    selectPrestamo.appendChild(option);
+                });
+
+                msgPrestamos.innerHTML = "";
+                divPrestamos.style.display = "block";
+
+            } catch(e) {
+                console.error(e);
+                msgPrestamos.innerHTML = `<span class="text-danger">
+                    Error al cargar los préstamos
+                </span>`;
+                divPrestamos.style.display = "block";
+            }
+        });
+
+        // habilitás el botón solo cuando seleccionan un préstamo
+        document.getElementById("selectPrestamo").addEventListener("change", function () {
+            document.getElementById("btnDevolver").disabled = !this.value;
+
+            const divDetalle = document.getElementById("divDetallePrestamo");
+
+            if (!this.value) {
+                divDetalle.style.display = "none";
+                return;
+            }
+
+            // buscás el préstamo en el array que ya trajiste del fetch
+            const prestamo = prestamosCache.find(p => p.id === parseInt(this.value));
+            if (!prestamo) return;
+
+            // cargás los datos en el detalle
+            document.getElementById("detId").textContent         = prestamo.id;
+            document.getElementById("detFechaInicio").textContent = new Date(prestamo.fechaInicio).toLocaleDateString();
+            document.getElementById("detFechaFin").textContent    = new Date(prestamo.fechaFin).toLocaleDateString();
+            document.getElementById("detEstado").textContent      = "EN PRÉSTAMO";
+
+            // cargás los equipos
+            const listaEquipos = document.getElementById("detEquipos");
+            listaEquipos.innerHTML = "";
+            prestamo.detallesEquipos.forEach(e => {
+                const li = document.createElement("li");
+                li.textContent = `${e.nombreEquipo} - ${e.marcaEquipo} ${e.modeloEquipo}`;
+                listaEquipos.appendChild(li);
+            });
+
+            divDetalle.style.display = "block";
+        });
+    </script>
+}

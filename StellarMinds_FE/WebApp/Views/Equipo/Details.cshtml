@@ -1,0 +1,108 @@
+﻿@using StellarMinds.AppWeb.Models.Dtos.Equipos
+@model StellarMinds.AppWeb.Models.Dtos.Equipos.EquipoDtoAlta
+
+<h2>Detalle de Equipo</h2>
+
+<div class="card">
+    <div class="card-body">
+
+        <dl class="row">
+
+            <dt class="col-sm-3">Id</dt>
+            <dd class="col-sm-9">@Model.id</dd>
+
+            <dt class="col-sm-3">Marca</dt>
+            <dd class="col-sm-9">@Model.marca</dd>
+
+            <dt class="col-sm-3">Modelo</dt>
+            <dd class="col-sm-9">@Model.modelo</dd> 
+
+            <dt class="col-sm-3">Cantidad Disponible</dt>
+            <dd class="col-sm-9">@Model.cantidadDisponible</dd>
+
+            <dt class="col-sm-3">Tipo</dt>
+            <dd class="col-sm-9">@Model.tipoEquipo</dd>
+
+        </dl>
+
+        @if (Model.tipoEquipo == TipoEquipo.Camara)
+        {
+            <h4>Datos de Cámara</h4> 
+
+            <dl class="row">
+                <dt class="col-sm-3">Tipo Sensor</dt>
+                <dd class="col-sm-9">@if(Model.tipoSensor == 0) { <text>CMOS</text> } else { <text>CCD</text> }</dd>
+
+                <dt class="col-sm-3">Resolución</dt>
+                <dd class="col-sm-9">@Model.resolucion</dd>
+
+                <dt class="col-sm-3">Tamaño Pixel</dt>
+                <dd class="col-sm-9">@Model.tamanioPixel</dd>
+            </dl>
+        }
+
+        @if (Model.tipoEquipo == TipoEquipo.Montura)
+        {
+            <h4>Datos de Montura</h4>
+
+            <dl class="row">
+                <dt class="col-sm-3">Carga Útil</dt>
+                <dd class="col-sm-9">@Model.cargaUtil</dd>
+
+                <dt class="col-sm-3">Computarizada</dt>
+                <dd class="col-sm-9">
+                    @(Model.esComputarizado ? "Sí" : "No")
+                </dd>
+
+                <dt class="col-sm-3">Tipo Montura</dt>
+                <dd class="col-sm-9">@if(Model.tipoMontura == 0) { <text>Altazimutal</text> } else if(Model.tipoMontura == 1) { <text>Ecuatorial</text> } else { <text>Híbrida</text> }</dd>
+            </dl>
+        }
+
+        @if (Model.tipoEquipo == TipoEquipo.Ocular)
+        {
+            <h4>Datos de Ocular</h4>
+
+            <dl class="row">
+                <dt class="col-sm-3">Diámetro</dt>
+                <dd class="col-sm-9">@Model.diametro</dd>
+
+                <dt class="col-sm-3">Ángulo de Visión</dt>
+                <dd class="col-sm-9">@Model.anguloVision</dd>
+            </dl>
+        }
+
+        @if (Model.tipoEquipo == TipoEquipo.Telescopio)
+        { 
+            <h4>Datos de Telescopio</h4>
+
+            <dl class="row">
+                <dt class="col-sm-3">Apertura</dt>
+                <dd class="col-sm-9">@Model.apertura</dd>
+
+                <dt class="col-sm-3">Relación Focal</dt>
+                <dd class="col-sm-9">@Model.relacionFocal</dd>
+
+                <dt class="col-sm-3">Peso</dt>
+                <dd class="col-sm-9">@Model.peso</dd>
+
+                <dt class="col-sm-3">Distancia Focal</dt>
+                <dd class="col-sm-9">@Model.distanciaFocal</dd>
+            </dl>
+        }
+
+    </div>
+</div>
+
+<br />
+
+<a asp-action="Edit"
+       asp-route-id="@Model.id"
+       class="btn btn-warning">
+    Modificar
+</a>
+
+<a asp-action="Index"
+       class="btn btn-secondary">
+    Volver
+</a>

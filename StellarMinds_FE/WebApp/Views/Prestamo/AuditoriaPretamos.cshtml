@@ -1,0 +1,66 @@
+﻿@model IEnumerable<StellarMinds.AppWeb.Models.Dtos.Prestamos.PrestamoDto>
+
+@{
+    ViewData["Title"] = "AuditoriaPretamos";
+}
+
+<h1>AuditoriaPretamos</h1>
+
+
+<!-- Prestamos -->
+<div class="mb-3" id="divPrestamos" style="display:none">
+    <label class="form-label">Préstamo a devolver</label>
+    <select id="selectPrestamo" name="idPrestamo" class="form-select">
+        <option value="">Seleccione un préstamo...</option>
+    </select>
+    <div id="msgPrestamos" class="mt-1"></div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaInicio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaFin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UsuarioId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaInicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaFin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

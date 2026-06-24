@@ -1,0 +1,195 @@
+﻿@model StellarMinds.AppWeb.Models.Dtos.Observaciones.ObservacionAltaDto
+
+@{
+    ViewData["Title"] = "Nueva Observación";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet" />
+
+<style>
+    .obs-wrap { max-width: 600px; margin: 0 auto; padding: 2rem 0; }
+    .obs-header { text-align: center; margin-bottom: 2.5rem; }
+    .obs-stars { font-size: 18px; letter-spacing: 6px; color: #EF9F27; margin-bottom: 10px; }
+    .obs-title { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 600; letter-spacing: 2px; color: #0e0e1a; margin: 0 0 6px; }
+    .obs-sub { font-size: 13px; color: #888; margin: 0; letter-spacing: 0.5px; }
+
+    .obs-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 16px; padding: 2rem; margin-bottom: 1.25rem; }
+    .obs-label { font-size: 12px; letter-spacing: 0.5px; color: #555; text-transform: uppercase; margin-bottom: 6px; display: block; }
+    .obs-select { width: 100%; padding: 10px 14px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 14px; color: #1a1a2e; background: #fafafa; transition: border-color 0.2s; outline: none; appearance: none; cursor: pointer; }
+    .obs-select:focus { border-color: #EF9F27; background: #fff; }
+    .obs-input { width: 100%; padding: 10px 14px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 14px; color: #1a1a2e; background: #fafafa; transition: border-color 0.2s; outline: none; box-sizing: border-box; }
+    .obs-input:focus { border-color: #EF9F27; background: #fff; }
+    .obs-group { margin-bottom: 1.25rem; }
+    .obs-group:last-child { margin-bottom: 0; }
+
+    .obs-result-card { background: #fafafa; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; display: none; }
+    .obs-result-card.visible { display: block; }
+    .obs-result-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #888; margin: 0 0 6px; }
+    .obs-indicador { font-family: 'Cinzel', serif; font-size: 18px; color: #0e0e1a; margin: 0 0 8px; font-weight: 600; }
+    .obs-detalle { font-size: 14px; color: #555; line-height: 1.6; margin: 0; }
+
+    .obs-error { background: #FCEBEB; border: 1px solid #F7C1C1; color: #791F1F; border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 1rem; display: none; }
+    .obs-error.visible { display: block; }
+
+    .obs-divider { display: flex; align-items: center; gap: 1rem; margin: 1.5rem 0; }
+    .obs-divider-line { flex: 1; height: 1px; background: #e5e5e5; }
+    .obs-divider-icon { color: #EF9F27; font-size: 12px; letter-spacing: 4px; }
+
+    .obs-btn { padding: 11px 28px; border-radius: 99px; border: none; font-size: 13px; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; }
+    .obs-btn-primary { background: #0e0e1a; color: #EF9F27; font-family: 'Cinzel', serif; }
+    .obs-btn-primary:hover { background: #1e1e35; }
+    .obs-btn-secondary { background: #fff; color: #888; border: 1px solid #e5e5e5; }
+    .obs-btn-secondary:hover { border-color: #bbb; color: #333; }
+    .obs-btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+    .obs-loading { display: none; font-size: 13px; color: #888; letter-spacing: 0.5px; }
+    .obs-loading.visible { display: inline-block; }
+</style>
+
+<div class="obs-wrap">
+
+    <div class="obs-header">
+        <div class="obs-stars">✦ ★ ✦</div>
+        <h1 class="obs-title">Nueva Observación</h1>
+        <p class="obs-sub">Registrá tu avistamiento en el cosmos</p>
+    </div>
+    <div asp-validation-summary="ModelOnly" class="create-error" ></div>
+    <form asp-action="Create" method="post">
+        <div class="obs-card">
+            <div class="obs-group">
+                <label class="obs-label">Préstamo</label>
+                <select id="PrestamoId" name="PrestamoId" class="obs-select">
+                    <option value="">Seleccione un préstamo...</option>
+                    @if (ViewBag.Prestamos != null)
+                    {
+                        foreach (var p in ViewBag.Prestamos)
+                        {
+                            <option value="@p.Id">@p.FechaInicio.ToString("dd/MM/yyyy") — @p.FechaFin.ToString("dd/MM/yyyy")</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="obs-group">
+                <label class="obs-label">Objeto celeste</label>
+                <select id="ObjetoCelesteId" name="ObjetoCelesteId" class="obs-select">
+                    <option value="">Seleccione un objeto celeste...</option>
+                    @if (ViewBag.ObjetosCelestes != null)
+                    {
+                        foreach (var o in ViewBag.ObjetosCelestes)
+                        {
+                            <option value="@o.id">@o.nombre — @o.tipo — Magnitud @o.magnitudAparente</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="obs-btn-row">
+                <button id="evaluar" type="button" class="obs-btn obs-btn-primary">Evaluar observación ✦</button>
+                <span class="obs-loading" id="loading">Consultando el cosmos...</span>
+            </div>
+        </div>
+
+        <div class="obs-error" id="obsError"></div>
+
+        <div class="obs-result-card" id="divPrestamos">
+            <p class="obs-result-label">Resultado de la evaluación</p>
+            <p class="obs-indicador" id="indicador"></p>
+            <p class="obs-detalle" id="detalle"></p>
+            <input type="hidden" id="inputIndicador" name="Indicador" />
+            <input type="hidden" id="inputDetalle"   name="Detalle" />
+        </div>
+
+        <div class="obs-card" id="btnGuardar" style="display:none">
+            <div class="obs-group">
+                <label asp-for="FechaObs" class="obs-label"></label>
+                <input asp-for="FechaObs" type="date" class="obs-input" />
+            </div>
+
+            <div class="obs-divider">
+                <div class="obs-divider-line"></div>
+                <div class="obs-divider-icon">✦</div>
+                <div class="obs-divider-line"></div>
+            </div>
+
+            <div class="obs-btn-row">
+                <button type="submit" class="obs-btn obs-btn-primary">Guardar observación ✦</button>
+                <a asp-controller="Home" asp-action="Index" class="obs-btn obs-btn-secondary">Cancelar</a>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+<script>
+        const createError = document.querySelector('.create-error');
+
+                document.querySelectorAll('select').forEach(function (select) {
+                        select.addEventListener('change', function () {
+                            if (createError) createError.style.display = 'none';
+                });
+            });
+
+        async function EvaluarObservacion(){
+                //let seEvaluo = document.getElementById("evaluar").value;
+
+            const divPrestamos = document.getElementById("divPrestamos");
+            const obsError     = document.getElementById("obsError");
+            const btnGuardar   = document.getElementById("btnGuardar");
+            const loading      = document.getElementById("loading");
+            const API_BASE     = "@ViewBag.ApiUrl";
+            const TOKEN        = "@ViewBag.Token";
+
+            divPrestamos.classList.remove("visible");
+            obsError.classList.remove("visible");
+            btnGuardar.style.display = "none";
+            loading.classList.add("visible");
+
+            try {  
+                let prestamo = document.getElementById("PrestamoId").value;
+                let objc = document.getElementById("ObjetoCelesteId").value;
+                if(prestamo != "" && objc != ""){
+                    const response = await fetch(`${API_BASE}api/Observacion/evaluar`, {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${TOKEN}`,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            prestamoId:      document.getElementById("PrestamoId").value,
+                            fechaObs:        new Date().toISOString(),
+                            indicador:       "",
+                            detalle:         "",
+                            objetoCelesteId: document.getElementById("ObjetoCelesteId").value
+                        })
+                    });
+
+                    const observacion = await response.json();
+
+                    document.getElementById("indicador").textContent     = observacion.indicador;
+                    document.getElementById("detalle").textContent       = observacion.detalle;
+                    document.getElementById("inputIndicador").value      = observacion.indicador;
+                    document.getElementById("inputDetalle").value        = observacion.detalle;
+
+                        if(observacion.indicador !== undefined){
+                            document.getElementById("btnGuardar").style.display = "block";
+                            divPrestamos.classList.add("visible");
+                            btnGuardar.style.display = "block";
+                        }
+                }else{
+                         obsError.textContent = `Error al evaluar la observación: Debe ingresar todos los campos.`;
+                    obsError.classList.add("visible");
+                }
+                    
+
+            } catch (error) {
+                    obsError.textContent = `Error al evaluar la observación: Debe ingresar todos los campos.`;
+                obsError.classList.add("visible");
+            } finally {
+                loading.classList.remove("visible");
+            }                 
+    }      
+        document.getElementById("evaluar").addEventListener("click", EvaluarObservacion); 
+</script>
+}

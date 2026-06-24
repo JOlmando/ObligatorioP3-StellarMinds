@@ -1,0 +1,54 @@
+﻿@model IEnumerable<StellarMinds.AppWeb.Models.Dtos.Usuarios.UsuarioModificarDto>
+
+@{
+    ViewData["Title"] = "Listado Socios";
+}
+
+<h2>Listado de Socios que solicitaron un telescopio</h2>
+
+<form method="post" id="formDevolver">
+    <!-- Telescopio -->
+    <div class="mb-3">
+        <label class="form-label">Telescopio</label>
+        <select id="idTelescopio" name="idTelescopio" class="form-select">
+            <option value="">Seleccione un telescopio...</option>
+            @if (ViewBag.Telescopios != null)
+            {
+                foreach (var s in ViewBag.Telescopios)
+                {
+                    <option value="@s.id">@s.marca - @s.modelo</option>
+                }
+            }
+        </select>
+    </div>
+    <button type="submit" id="btnListarSocios" class="btn btn-primary">
+        Buscar Socios
+    </button>
+</form>
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>User name</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Calle, numero de puerta, apto</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.UserName</td>
+                    <td>@p.Name</td>
+                    <td>@p.Email</td>
+                    <td>@p.Calle - @p.NumeroPuerta - @p.Apartamento</td>                
+                </tr>
+            }
+        }
+    </tbody>
+</table>

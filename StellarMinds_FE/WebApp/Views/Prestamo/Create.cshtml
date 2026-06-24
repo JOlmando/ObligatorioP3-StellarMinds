@@ -1,0 +1,299 @@
+﻿@model StellarMinds.AppWeb.Models.Dtos.Prestamos.PrestamoAltaDto
+@{
+    ViewData["Title"] = "Nuevo Préstamo";
+}
+
+<h2>Nuevo Préstamo</h2>
+
+@* @if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+} *@
+<div asp-validation-summary="ModelOnly" class="create-error"></div>
+<form method="post" id="formPrestamo">
+
+    <!-- Socio -->
+    <div class="mb-3">
+        <label class="form-label">Socio</label>
+        <select name="idUsuario" class="form-select">
+            <option value="">Seleccione un socio...</option> 
+            @if (ViewBag.Socios != null)
+            { 
+                foreach (var s in ViewBag.Socios)
+                {
+                    <option value="@s.Id">@s.UserName</option>
+                }
+            }
+        </select>
+    </div>
+
+    <!-- Fechas -->
+    <div class="mb-3">
+        <label class="form-label">Fecha Inicio</label>
+        <input type="date" name="fechaInicio" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Fecha Fin</label>
+        <input type="date" name="fechaFin" class="form-control" />
+    </div>
+
+    <!-- Telescopio -->
+    <div class="mb-3">
+        <label class="form-label">Telescopio</label>
+        <select id="selectTelescopio" class="form-select">
+            <option value="">Seleccione un telescopio...</option>
+            @if (ViewBag.Telescopios != null)
+            { 
+                foreach (var t in ViewBag.Telescopios)
+                {
+                    <option value="@t.id" data-disponible="@t.stockSinUso" data-peso="@t.peso" >
+                        @t.marca - @t.modelo (@t.stockSinUso disponibles)
+                    </option>
+                }
+            }
+        </select>
+        <div id="msgTelescopio" class="mt-1"></div>
+    </div>
+
+    <!-- Montura -->
+    <div class="mb-3">
+        <label class="form-label">Montura</label>
+        <select id="selectMontura" class="form-select">
+            <option value="">Seleccione una montura...</option>
+            @if (ViewBag.Monturas != null)
+            {
+                foreach (var m in ViewBag.Monturas)
+                {
+                    <option value="@m.id" data-disponible="@m.stockSinUso" data-cargautil="@m.cargaUtil" data-tipomontura="@m.tipoMontura">
+                        @m.marca - @m.modelo (@m.stockSinUso disponibles) - @if(m.tipoMontura == 0) { <text>Altazimutal</text> } else if(m.tipoMontura == 1) { <text>Ecuatorial</text> } else { <text>Híbrida</text> }
+                    </option>
+                }
+            }             
+        </select>
+        <div id="msgMontura" class="mt-1"></div>
+    </div>
+
+    <!-- Camara (opcional) -->
+    <div class="mb-3">
+        <label class="form-label">Cámara <small class="text-muted">(opcional)</small></label>
+        <select id="selectCamara" class="form-select">
+            <option value="">Ninguna</option>
+                @if (ViewBag.Camaras != null)
+                {
+                    @foreach (var c in ViewBag.Camaras)
+                    {
+                        <option value="@c.id" data-disponible="@c.stockSinUso">
+                            @c.marca - @c.modelo (@c.stockSinUso disponibles) - @if(c.tipoSensor == 0) { <text>CMOS</text> } else { <text>CCD</text> }
+                        </option>
+                    }
+                }
+        </select>
+        <div id="msgCamara" class="mt-1"></div>
+    </div>
+
+    <!-- Ocular (opcional) -->
+    <div class="mb-3">
+        <label class="form-label">Ocular <small class="text-muted">(opcional)</small></label>
+        <select id="selectOcular" class="form-select">
+            <option value="">Ninguno</option>
+             @if (ViewBag.Oculares != null)
+                {
+                 @foreach (var o in ViewBag.Oculares)
+                    {
+                    <option value="@o.id" data-disponible="@o.stockSinUso">
+                        @o.marca - @o.modelo (@o.stockSinUso disponibles)
+                    </option>
+                    }
+                }
+        </select>
+        <div id="msgOcular" class="mt-1"></div>
+    </div>
+
+    <!-- mensaje general de error de equipos -->
+    <div id="msgCamaraOcular" class="text-danger mb-2"></div>
+
+    <button type="submit" class="btn btn-primary">Crear Préstamo</button>
+
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+
+</form>
+
+@section Scripts {
+    <script>
+        const API_BASE = "@ViewBag.ApiUrl";
+
+        // verifica disponibilidad consultando la WebAPI con fetch
+        async function verificarDisponibilidad(selectId, msgId) {
+            const select = document.getElementById(selectId);
+            const msgDiv = document.getElementById(msgId);
+
+            if (!select.value) {
+                msgDiv.innerHTML = "";
+                return true;
+            }
+
+            try {
+                const TOKEN = "@ViewBag.Token";
+
+                const response = await fetch(`${API_BASE}api/Equipo/${select.value}/disponibilidad`,
+                    {
+                        headers: {
+                            "Authorization": `Bearer ${TOKEN}`
+                        }
+                    }
+                );
+                const data = await response.json();
+
+                if (data.stockSinUso === 0) {
+                    msgDiv.innerHTML = `<span class="text-danger">Sin disponibilidad</span>`;
+                    return false;
+                } else {
+                    msgDiv.innerHTML = `<span class="text-success">✓ Disponible (${data.stockSinUso})</span>`;
+                    return true;
+                }
+            } catch(e){
+                console.error("Error verificando disponibilidad:", e);
+                msgDiv.innerHTML = "";
+                return true; // si falla el fetch el backend valida igual
+            }
+        }
+
+            function validarCompatibilidad() {
+            const selectTelescopio = document.getElementById("selectTelescopio");
+            const selectMontura    = document.getElementById("selectMontura");
+            const selectCamara     = document.getElementById("selectCamara");
+            const msgMontura       = document.getElementById("msgMontura");
+
+            // si no están los dos seleccionados no validamos todavía
+            if (!selectTelescopio.value || !selectMontura.value) return true;
+
+            const pesoTelescopio = parseFloat(
+                selectTelescopio.options[selectTelescopio.selectedIndex].getAttribute("data-peso")
+            );
+            const cargaUtil = parseFloat(
+                selectMontura.options[selectMontura.selectedIndex].getAttribute("data-cargautil")
+            );
+            const tipoMontura = parseInt(
+                selectMontura.options[selectMontura.selectedIndex].getAttribute("data-tipomontura")
+            );
+
+            // validación 1: carga útil soporta el peso del telescopio
+            if (cargaUtil < pesoTelescopio) {
+                msgMontura.innerHTML = `<span class="text-danger">
+                    La montura no soporta el peso del telescopio
+                    (peso: ${pesoTelescopio}kg, carga útil: ${cargaUtil}kg)
+                </span>`;
+                return false;
+            }
+
+            // validación 2: si hay cámara, la montura debe ser ecuatorial (1) o híbrida (2)
+            if (selectCamara.value && tipoMontura === 0) { // 0 = AltAzimutal
+                msgMontura.innerHTML = `<span class="text-danger">
+                    Para astrofotografía la montura debe ser Ecuatorial o Híbrida
+                </span>`;
+                return false;
+            }
+
+            msgMontura.innerHTML = `<span class="text-success">✓ Montura compatible</span>`;
+            return true;
+        }
+
+        // eventos change de cada selector
+        document.getElementById("selectTelescopio").addEventListener("change", function () {
+            verificarDisponibilidad("selectTelescopio", "msgTelescopio");
+            validarCompatibilidad();
+        });
+
+        document.getElementById("selectMontura").addEventListener("change", function () {
+            verificarDisponibilidad("selectMontura", "msgMontura");
+            validarCompatibilidad();
+        });
+
+        document.getElementById("selectCamara").addEventListener("change", function () {
+            verificarDisponibilidad("selectCamara", "msgCamara");
+            validarCamaraOcular();
+            validarCompatibilidad();
+            const selectOcular = document.getElementById("selectOcular");
+            if (this.value) {
+                selectOcular.disabled = true;
+                selectOcular.value = "";
+                document.getElementById("msgOcular").innerHTML = "";
+            } else {
+                // si volvió a "Ninguna", libera el ocular
+                selectOcular.disabled = false;
+            }
+        });
+
+        document.getElementById("selectOcular").addEventListener("change", function () {
+            verificarDisponibilidad("selectOcular", "msgOcular");
+            validarCamaraOcular();
+            validarCompatibilidad();
+                // si seleccionó una cámara, bloquea el ocular
+                const selectCamara = document.getElementById("selectCamara");
+            if (this.value) {
+                selectCamara.disabled = true;
+                selectCamara.value = "";
+                document.getElementById("msgCamara").innerHTML = "";
+            } else {
+                // si volvió a "Ninguno", libera la cámara
+                selectCamara.disabled = false;
+            }
+        });
+
+        // valida que venga al menos cámara o ocular
+        function validarCamaraOcular() {
+            const camara = document.getElementById("selectCamara").value;
+            const ocular = document.getElementById("selectOcular").value;
+            const msg = document.getElementById("msgCamaraOcular");
+
+            if (!camara && !ocular) {
+                msg.textContent = "Debe seleccionar al menos una cámara o un ocular";
+                return false;
+            }
+            msg.textContent = "";
+            return true;
+        }
+
+        // intercept del submit
+        document.getElementById("formPrestamo").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            // validar cámara u ocular
+            if (!validarCamaraOcular()) return;
+            if (!validarCompatibilidad()) return;
+
+            // verificar disponibilidad de todos los seleccionados
+            const telescopioOk = await verificarDisponibilidad("selectTelescopio", "msgTelescopio");
+            const monturaOk    = await verificarDisponibilidad("selectMontura", "msgMontura");
+            const camaraOk     = await verificarDisponibilidad("selectCamara", "msgCamara");
+            const ocularOk     = await verificarDisponibilidad("selectOcular", "msgOcular");
+
+            if (telescopioOk && monturaOk && camaraOk && ocularOk) {
+                // armás el array de ids de equipos seleccionados
+                const idEquipos = [
+                    document.getElementById("selectTelescopio").value,
+                    document.getElementById("selectMontura").value,
+                    document.getElementById("selectCamara").value,
+                    document.getElementById("selectOcular").value
+                ].filter(id => id !== ""); // filtrás los vacíos (opcionales no seleccionados)
+
+                // agregás los ids al form antes de submitear
+                idEquipos.forEach((id, index) => {
+                    const input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = `idEquipos[${index}]`;
+                    input.value = id;
+                    this.appendChild(input);
+                });
+
+                this.submit();
+            }
+        });
+    </script>
+}

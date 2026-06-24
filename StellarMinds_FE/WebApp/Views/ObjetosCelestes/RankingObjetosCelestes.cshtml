@@ -1,0 +1,39 @@
+﻿@model IEnumerable<StellarMinds.AppWeb.Models.Dtos.ObjetoCeleste.RankingObjetoCelesteDto>
+
+@{
+    ViewData["Title"] = "Ranking";
+}
+
+<h1>Ranking objetos celestes</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CantidadObservaciones)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tipo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CantidadObservaciones)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

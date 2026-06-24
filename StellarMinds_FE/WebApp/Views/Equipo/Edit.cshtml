@@ -1,0 +1,210 @@
+﻿@model StellarMinds.AppWeb.Models.Dtos.Equipos.EquipoDtoAlta
+
+@{
+    ViewData["Title"] = "Editar Equipo";
+}
+
+<h1>Editar Equipo</h1>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<style>
+    #camaraFields,
+    #monturaFields,
+    #ocularFields,
+    #telescopioFields {
+        display: none;
+    }
+</style>
+
+<form asp-action="Edit" asp-route-id="@Model.id" method="post">
+
+    <input type="hidden" asp-for="id" />
+
+    <div class="mb-3">
+        <label asp-for="marca" class="form-label"></label>
+        <input asp-for="marca" class="form-control" />
+        <span asp-validation-for="marca" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="modelo" class="form-label"></label>
+        <input asp-for="modelo" class="form-control" />
+        <span asp-validation-for="modelo" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="cantidadDisponible" class="form-label"></label>
+        <input asp-for="cantidadDisponible" class="form-control" />
+        <span asp-validation-for="cantidadDisponible" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="tipoEquipo" class="form-label"></label>
+        <select asp-for="tipoEquipo"
+                class="form-select"
+                id="tipoEquipo">
+
+            <option value="0">Telescopio</option>
+            <option value="1">Montura</option>
+            <option value="2">Camara</option>
+            <option value="3">Ocular</option>
+
+        </select>
+    </div>
+
+    <hr />
+
+    <!-- CAMARA -->
+
+    <div id="camaraFields">
+
+        <h4>Cámara</h4>
+
+        <div class="mb-3">
+            <label asp-for="tipoSensor" class="form-label">
+                Tipo de Sensor
+            </label>
+
+            <select asp-for="tipoSensor" class="form-select">
+                <option value="0">CMOS</option>
+                <option value="1">CCD</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="resolucion"></label>
+            <input asp-for="resolucion" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="tamanioPixel"></label>
+            <input asp-for="tamanioPixel" class="form-control" />
+        </div>
+
+    </div>
+
+    <!-- MONTURA -->
+
+    <div id="monturaFields">
+
+        <h4>Montura</h4>
+
+        <div class="mb-3">
+            <label asp-for="cargaUtil"></label>
+            <input asp-for="cargaUtil" type="number" class="form-control" />
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="esComputarizado" class="form-check-input" />
+            <label asp-for="esComputarizado" class="form-check-label">
+                Computarizada
+            </label>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="tipoMontura" class="form-label">
+                Tipo de Montura
+            </label>
+
+            <select asp-for="tipoMontura" class="form-select">
+                <option value="0">Altazimutal</option>
+                <option value="1">Ecuatorial</option>
+                <option value="2">Hibrida</option>
+            </select>
+        </div>
+
+    </div>
+
+    <!-- OCULAR -->
+
+    <div id="ocularFields">
+
+        <h4>Ocular</h4>
+
+        <div class="mb-3">
+            <label asp-for="diametro"></label>
+            <input asp-for="diametro" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="anguloVision"></label>
+            <input asp-for="anguloVision" class="form-control" />
+        </div>
+
+    </div>
+
+    <!-- TELESCOPIO -->
+
+    <div id="telescopioFields">
+
+        <h4>Telescopio</h4>
+
+        <div class="mb-3">
+            <label asp-for="apertura"></label>
+            <input asp-for="apertura" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="relacionFocal"></label>
+            <input asp-for="relacionFocal" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="peso"></label>
+            <input asp-for="peso" type="number" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="distanciaFocal"></label>
+            <input asp-for="distanciaFocal" class="form-control" />
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Guardar Cambios
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Cancelar
+    </a>
+
+</form>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        function actualizarFormulario() {
+
+            let tipo = document.getElementById("tipoEquipo").value;
+
+            document.getElementById("camaraFields").style.display = "none";
+            document.getElementById("monturaFields").style.display = "none";
+            document.getElementById("ocularFields").style.display = "none";
+            document.getElementById("telescopioFields").style.display = "none";
+
+            if (tipo == "0")
+                document.getElementById("telescopioFields").style.display = "block";
+
+            if (tipo == "1")
+                document.getElementById("monturaFields").style.display = "block";
+
+            if (tipo == "2")
+                document.getElementById("camaraFields").style.display = "block";
+
+            if (tipo == "3")
+                document.getElementById("ocularFields").style.display = "block";
+        }
+
+        document.getElementById("tipoEquipo")
+            .addEventListener("change", actualizarFormulario);
+
+        actualizarFormulario();
+
+    </script>
+
+}

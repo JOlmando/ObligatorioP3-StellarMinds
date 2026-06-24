@@ -1,0 +1,40 @@
+﻿@model IEnumerable<StellarMinds.AppWeb.Models.Dtos.Logs.LogPrestamoDto>
+
+<h1>Préstamos</h1>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>PrestamoId</th>
+            <th>UsuarioId</th>
+            <th>Coordinador</th>
+            <th>Fecha</th>
+            <th>Operacion</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if(Model != null){
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.PrestamoId</td>
+                <td>@item.UsuarioId</td>
+                <td>@item.NombreCoordinador</td>
+                <td>@item.Fecha.ToShortDateString()</td>
+                <td>@item.Operacion</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.PrestamoId" class="btn btn-info">
+                        Ver
+                    </a>
+                </td>
+            </tr>
+        }
+        }
+    </tbody>
+
+</table>

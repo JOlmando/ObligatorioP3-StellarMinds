@@ -1,0 +1,68 @@
+﻿@using StellarMinds.AppWeb.Models.Dtos.Usuarios
+@model StellarMinds.AppWeb.Models.Dtos.Usuarios.UsuarioModificarDto
+
+<h2>Modificar Usuario</h2>
+
+<form asp-action="Edit" method="post">
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Calle"></label>
+        <input asp-for="Calle" class="form-control" />
+        <span asp-validation-for="Calle" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NumeroPuerta"></label>
+        <input asp-for="NumeroPuerta" class="form-control" />
+        <span asp-validation-for="NumeroPuerta" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Apartamento"></label>
+        <input asp-for="Apartamento" class="form-control" />
+        <span asp-validation-for="Apartamento" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Rol"></label>
+        <select asp-for="Rol"
+                asp-items="Html.GetEnumSelectList<UsuarioAltaDto.TipoRol>()"
+                class="form-control">
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Guardar Cambios
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Cancelar
+    </a>
+
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
