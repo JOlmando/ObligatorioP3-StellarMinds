@@ -11,7 +11,6 @@
 | Nombre | Nº Estudiante |
 |--------|--------------|
 | _Jeremias Olmando_ | _350065_ |
-| _Camilo Paisani_ | _207448_ |
 
 ---
 
@@ -19,7 +18,7 @@
 
 Sistema web para el observatorio astronómico y club de aficionados **StellarMinds** que permite gestionar socios, equipos de observación en préstamo y sesiones de observación/astrofotografía.
 
-Integra la **API de Google Gemini** para evaluar la adecuación del equipamiento al objeto celeste que se desea observar o fotografiar.
+Integra la **API de Alguna IA** para evaluar la adecuación del equipamiento al objeto celeste que se desea observar o fotografiar.
 
 ---
 
